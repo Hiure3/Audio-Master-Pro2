@@ -1,0 +1,28 @@
+name: build-windows
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configurar (CMake)
+        run: cmake --preset windows-release
+
+      - name: Compilar (Release)
+        run: cmake --build --preset windows-release
+
+      - name: Rodar testes
+        run: ctest --preset windows-release
+
+      - name: Guardar o Standalone
+        uses: actions/upload-artifact@v4
+        with:
+          name: AudioMasterPro-Windows-Release
+          path: build/windows-release/AudioMasterPro_artefacts/Release/
